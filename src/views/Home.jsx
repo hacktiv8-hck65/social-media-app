@@ -1,8 +1,13 @@
 import { useState } from "react";
 
+
 function Home() {
-  return <>
-  home</>;
+
+  return (
+    <>
+ home
+    </>
+  );
 }
 
 export default Home;
