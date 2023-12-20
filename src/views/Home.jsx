@@ -1,8 +1,52 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Comment from "./Comment";
-import AddPost from "./AddPost";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import {addDoc, collection, onSnapshot, orderBy, query, serverTimestamp} from "firebase/firestore";
+import {auth, db} from "../firebase.js";
+import {setPost} from "../features/post/postSlice.js";
+
 
 function Home() {
+  const dispatch = useDispatch()
+  const posts = useSelector((state) => state.post.listPost)
+  const user = useSelector((state) => state.auth.user)
+  const [newMessage, setNewMessage] = useState("");
+  const postsRef = collection(db, "posts");
+
+  useEffect(() => {
+    const queryMessages = query(
+        postsRef,
+        orderBy("createdAt", 'desc')
+    );
+    const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
+      let posts = [];
+      snapshot.forEach((doc) => {
+        posts.push({ ...doc.data(), id: doc.id });
+      });
+
+      dispatch(setPost(posts))
+    });
+
+    return () => unsuscribe();
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (newMessage === "") return;
+    await addDoc(postsRef, {
+      text: newMessage,
+      createdAt: serverTimestamp(),
+      displayName: auth.currentUser.displayName,
+      photoURL: auth.currentUser.photoURL,
+    });
+
+    setNewMessage("");
+  };
+
+  console.log(posts)
+
   return (
     <div>
       <div className="flex flex-col items-center">

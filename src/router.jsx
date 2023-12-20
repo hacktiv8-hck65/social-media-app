@@ -5,6 +5,7 @@ import Login from "./views/Login.jsx";
 import Comment from "./views/Comment.jsx";
 import React from "react";
 import Cookies from "universal-cookie";
+import Home2 from "./views/Home2.jsx";
 const cookies = new Cookies();
 import AddPost from "./views/AddPost.jsx";
 
@@ -31,6 +32,16 @@ export const router = createBrowserRouter([
       return null
     },
     element: <Home/>,
+  },
+  {
+    path: "/a",
+    loader: () => {
+      if (!cookies.get("auth-token")) {
+        throw redirect('/login')
+      }
+      return null
+    },
+    element: <Home2/>,
   },
   {
     path: "/login",

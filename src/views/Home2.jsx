@@ -16,7 +16,7 @@ function Home() {
     const dispatch = useDispatch()
     const posts = useSelector((state) => state.post.listPost)
     const [newMessage, setNewMessage] = useState("");
-    const messagesRef = collection(db, "messages");
+    const messagesRef = collection(db, "posts");
 
     useEffect(() => {
         const queryMessages = query(
@@ -26,7 +26,7 @@ function Home() {
         const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
             let posts = [];
             snapshot.forEach((doc) => {
-                posts.push({ ...doc.data(), id: doc.id });
+                posts.push({...doc.data(), id: doc.id});
             });
 
             dispatch(setPost(posts))
@@ -42,7 +42,8 @@ function Home() {
         await addDoc(messagesRef, {
             text: newMessage,
             createdAt: serverTimestamp(),
-            user: auth.currentUser.displayName,
+            displayName: auth.currentUser.displayName,
+            photoURL: auth.currentUser.photoURL,
         });
 
         setNewMessage("");
