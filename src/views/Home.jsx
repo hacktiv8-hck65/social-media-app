@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Comment from "./Comment";
+import AddPost from "./AddPost";
 
 function Home() {
   return (
@@ -76,6 +77,8 @@ function Home() {
                 <span>0</span>
               </button>
             </div>
+
+            
 
             <Comment />
           </div>

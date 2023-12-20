@@ -3,6 +3,7 @@ import Home from "./views/Home.jsx";
 import Layout from "./layouts/Layout.jsx";
 import Login from "./views/Login.jsx";
 import Comment from "./views/Comment.jsx";
+import AddPost from "./views/AddPost.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/add-post",
+        element: < AddPost/>
+      }
     ],
   },
 ]);
