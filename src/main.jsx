@@ -1,17 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import {db, auth} from './firebase';
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import Home from "./views/Home.jsx";
+import store from './store'
+import {router} from './router'
+import {Provider} from "react-redux";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home/>,
-  },
-]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+    <Provider store={store}>
+        <RouterProvider router={router}/>
+    </Provider>
 );
