@@ -43,6 +43,7 @@ function Home() {
       createdAt: serverTimestamp(),
       displayName: auth.currentUser.displayName,
       photoURL: auth.currentUser.photoURL,
+      comments: [],
     });
 
     setPostStatus("");
@@ -79,7 +80,7 @@ function Home() {
         {posts.map((post, index) => (
           <div
             key={index}
-            className="flex flex-col max-w-lg p-6 space-y-6 overflow-hidden rounded-lg shadow-md dark:bg-gray-900 dark:text-gray-100"
+            className="flex flex-col max-w-lg p-6 space-y-6 overflow-hidden rounded-lg shadow-md dark:bg-gray-900 dark:text-gray-100 w-full"
           >
             <div className="flex space-x-4">
               <img
@@ -97,7 +98,7 @@ function Home() {
             <div>
               <p className="text-sm dark:text-gray-400">{post.text}</p>
             </div>
-            <div className="flex flex-wrap justify-between">
+            <div className="flex flex-wrap justify-between w-full">
               <div className="flex space-x-2 text-sm dark:text-gray-400">
                 <button
                   type="button"
@@ -123,7 +124,7 @@ function Home() {
                 </button>
               </div>
 
-              <Comment />
+              <Comment id={post.id} comments={post.comments}/>
             </div>
           </div>
         ))}
