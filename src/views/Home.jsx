@@ -9,9 +9,12 @@ import {
     query,
     orderBy,
 } from "firebase/firestore";
+import {useDispatch, useSelector} from "react-redux";
+import {setPost} from "../features/post/postSlice.js";
 
 function Home() {
-    const [messages, setMessages] = useState([]);
+    const dispatch = useDispatch()
+    const posts = useSelector((state) => state.post.listPost)
     const [newMessage, setNewMessage] = useState("");
     const messagesRef = collection(db, "messages");
 
@@ -21,12 +24,12 @@ function Home() {
             orderBy("createdAt")
         );
         const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
-            let messages = [];
+            let posts = [];
             snapshot.forEach((doc) => {
-                messages.push({ ...doc.data(), id: doc.id });
+                posts.push({ ...doc.data(), id: doc.id });
             });
-            console.log(messages);
-            setMessages(messages);
+
+            dispatch(setPost(posts))
         });
 
         return () => unsuscribe();
@@ -39,7 +42,7 @@ function Home() {
         await addDoc(messagesRef, {
             text: newMessage,
             createdAt: serverTimestamp(),
-            // user: auth.currentUser.displayName,
+            user: auth.currentUser.displayName,
         });
 
         setNewMessage("");
@@ -50,10 +53,9 @@ function Home() {
             <div className="header">
             </div>
             <div className="messages">
-                {messages.map((message) => (
-                    <div key={message.id} className="message">
-                        {/*<span className="user">{message.user}:</span> {message.text}*/}
-                        {message.text}
+                {posts.map((post) => (
+                    <div key={post.id} className="message">
+                        <span className="user">{post.user}:</span> {post.text}
                     </div>
                 ))}
             </div>
