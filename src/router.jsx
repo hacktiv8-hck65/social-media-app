@@ -10,22 +10,18 @@ const cookies = new Cookies();
 export const router = createBrowserRouter([
   {
     element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-    ],
-  },
-  {
-    path: "/",
     loader: () => {
       if (!cookies.get("auth-token")) {
         throw redirect('/login')
       }
       return null
     },
-    element: <Home/>,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+    ],
   },
   {
     path: "/a",
