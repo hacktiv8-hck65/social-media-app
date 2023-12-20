@@ -4,14 +4,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {
     addDoc,
-    collection,
+    collection, doc, getDoc,
     onSnapshot,
     orderBy,
     query,
-    serverTimestamp,
+    serverTimestamp, updateDoc,
 } from "firebase/firestore";
 import {auth, db} from "../firebase.js";
 import {setPost} from "../features/post/postSlice.js";
+import {toast} from "react-toastify";
 
 function Home() {
     const dispatch = useDispatch();
@@ -37,18 +38,44 @@ function Home() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (postStatus === "") return;
-        await addDoc(postsRef, {
-            text: postStatus,
-            createdAt: serverTimestamp(),
-            displayName: auth.currentUser.displayName,
-            photoURL: auth.currentUser.photoURL,
-            comments: [],
-        });
+        if (postStatus === "") {
+            const notify = () => toast("isi statusmu terlebih dahulu");
+            notify()
+        } else {
+            await addDoc(postsRef, {
+                text: postStatus,
+                createdAt: serverTimestamp(),
+                displayName: auth.currentUser.displayName,
+                photoURL: auth.currentUser.photoURL,
+                comments: [],
+                likes: [],
+            });
 
-        setPostStatus("");
+            setPostStatus("");
+        }
+
     };
 
+
+    const handleLike = async (id, likes) => {
+        event.preventDefault();
+
+        let postDB = doc(db, "posts", id)
+        let dataDB = (await getDoc(postDB)).data()
+        let dataLikes = dataDB.likes
+
+        let isLike = (likes.includes(auth.currentUser.uid)) ? false : true
+        if (isLike) {
+            dataLikes.push(auth.currentUser.uid)
+        } else {
+            dataLikes = dataLikes.filter(item => auth.currentUser.uid !== item)
+        }
+
+        await updateDoc(doc(db, "posts", id), {"likes": dataLikes});
+
+
+        // setComment("")
+    };
     return (
         <div>
             <div className="flex flex-col items-center">
@@ -72,7 +99,7 @@ function Home() {
                         className="bg-blue-600 text-white hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         onClick={handleSubmit}
                     >
-                        Submit
+                        Posting
                     </button>
                 </form>
 
@@ -91,7 +118,8 @@ function Home() {
                                 <span rel="noopener noreferrer" className="font-semibold">
                                     {post.displayName}
                                 </span>
-                                <span className="text-xs dark:text-gray-400">{(post.createdAt) && post.createdAt.toDate().toDateString()}</span>
+                                <span
+                                    className="text-xs dark:text-gray-400">{(post.createdAt) && post.createdAt.toDate().toDateString()}</span>
                             </div>
                         </div>
                         <div>
@@ -99,6 +127,29 @@ function Home() {
                         </div>
                         <div className="flex flex-wrap justify-between w-full">
                             <div className="flex space-x-2 text-sm dark:text-gray-400">
+                                <button
+                                    onClick={() => handleLike(post.id, post.likes)}
+                                    type="button"
+                                    className="flex items-center p-1 space-x-1.5"
+                                >
+
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="w-6 h-6"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                                        />
+                                    </svg>
+
+                                    <span>{post.likes.length}</span>
+                                </button>
                                 <button
                                     type="button"
                                     className="flex items-center p-1 space-x-1.5"
@@ -109,7 +160,6 @@ function Home() {
                                         viewBox="0 0 24 24"
                                         strokeWidth={1.5}
                                         stroke="currentColor"
-                                        dataSlot="icon"
                                         className="w-6 h-6"
                                     >
                                         <path
@@ -121,6 +171,7 @@ function Home() {
 
                                     <span>{post.comments.length}</span>
                                 </button>
+
                             </div>
 
                             <Comment id={post.id} comments={post.comments}/>

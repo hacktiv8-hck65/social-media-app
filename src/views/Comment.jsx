@@ -3,6 +3,7 @@ import {auth, db} from "../firebase.js";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {setPost} from "../features/post/postSlice.js";
+import {toast} from "react-toastify";
 
 function Comment({id, comments}) {
     const [comment, setComment] = useState("");
@@ -11,18 +12,25 @@ function Comment({id, comments}) {
     const handleSubmitComment = async (event) => {
         event.preventDefault();
 
-        let postDB = doc(db, "posts", id)
-        let dataDB = (await getDoc(postDB)).data()
+        if (comment === "") {
+            const notify = () => toast("isi commentmu terlebih dahulu");
+            notify()
+        } else {
+            let postDB = doc(db, "posts", id)
+            let dataDB = (await getDoc(postDB)).data()
 
-        let dataComments = dataDB.comments
-        dataComments.push({
-            "photoURL": auth.currentUser.photoURL,
-            "displayName": auth.currentUser.displayName,
-            "text": comment,
-        })
+            let dataComments = dataDB.comments
+            dataComments.push({
+                "photoURL": auth.currentUser.photoURL,
+                "displayName": auth.currentUser.displayName,
+                "text": comment,
+            })
 
-        await updateDoc(doc(db, "posts", id), {"comments": dataComments});
-        setComment("")
+            await updateDoc(doc(db, "posts", id), {"comments": dataComments});
+            setComment("")
+        }
+
+
     };
 
     return (
