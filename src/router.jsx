@@ -1,14 +1,12 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import Home from "./views/Home.jsx";
 import Layout from "./layouts/Layout.jsx";
 import Login from "./views/Login.jsx";
 import Comment from "./views/Comment.jsx";
-
+import React from "react";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 export const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: < Login/>
-  },
   {
     element: <Layout />,
     children: [
@@ -17,5 +15,25 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
     ],
+  },
+  {
+    path: "/",
+    loader: () => {
+      if (!cookies.get("auth-token")) {
+        throw redirect('/login')
+      }
+      return null
+    },
+    element: <Home/>,
+  },
+  {
+    path: "/login",
+    loader: () => {
+      if (cookies.get("auth-token")) {
+        throw redirect('/')
+      }
+      return null
+    },
+    element: <Login/>,
   },
 ]);
