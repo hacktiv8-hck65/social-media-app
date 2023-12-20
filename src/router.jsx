@@ -6,6 +6,8 @@ import Comment from "./views/Comment.jsx";
 import React from "react";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
+import AddPost from "./views/AddPost.jsx";
+
 export const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -14,6 +16,10 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/add-post",
+        element: < AddPost/>
+      }
     ],
   },
   {
