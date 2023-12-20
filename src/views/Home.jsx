@@ -49,13 +49,11 @@ function Home() {
         setPostStatus("");
     };
 
-    console.log(posts);
     return (
         <div>
             <div className="flex flex-col items-center">
                 <form
                     className="max-w-lg mx-auto p-6 bg-white border rounded-lg shadow-lg w-full"
-                    onSubmit={handleSubmit}
                 >
                     <div className="mb-4">
             <textarea
@@ -71,8 +69,8 @@ function Home() {
             />
                     </div>
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
+                        className="bg-blue-600 text-white hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        onClick={handleSubmit}
                     >
                         Submit
                     </button>
@@ -90,10 +88,10 @@ function Home() {
                                 className="object-cover w-12 h-12 rounded-full shadow dark:bg-gray-500"
                             />
                             <div className="flex flex-col space-y-1">
-                                <a rel="noopener noreferrer" href="#" className="font-semibold">
+                                <span rel="noopener noreferrer" className="font-semibold">
                                     {post.displayName}
-                                </a>
-                                <span className="text-xs dark:text-gray-400">4 hours ago</span>
+                                </span>
+                                <span className="text-xs dark:text-gray-400">{(post.createdAt) && post.createdAt.toDate().toDateString()}</span>
                             </div>
                         </div>
                         <div>

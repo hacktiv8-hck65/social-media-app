@@ -34,7 +34,7 @@ function Comment({id, comments}) {
                             Comment
                         </h2>
                     </div>
-                    <form className="mb-6" onSubmit={handleSubmitComment}>
+                    <form className="mb-6">
                         <div
                             className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                             <label htmlFor="comment" className="sr-only">
@@ -53,14 +53,13 @@ function Comment({id, comments}) {
                             />
                         </div>
                         <button
-                            type="submit"
-                            className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center bg-blue-500 rounded-lg focus:ring-4dark:focus:ring-blue-900 hover:bg-blue-600"
-                        >
+                            onClick={handleSubmitComment}
+                            className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center bg-blue-600 text-white rounded-lg focus:ring-4dark:focus:ring-blue-900 hover:bg-blue-500">
                             Post comment
                         </button>
                     </form>
                     {comments.map((comment, index) => (
-                        <article className="p-6 text-base bg-white rounded-lg dark:bg-gray-900">
+                        <article className="p-6 text-base bg-white rounded-lg dark:bg-gray-900" key={index}>
                             <footer className="flex justify-between items-center mb-2">
                                 <div className="flex items-center">
                                     <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
@@ -71,16 +70,6 @@ function Comment({id, comments}) {
                                         />
                                         {comment.displayName}
                                     </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        <time
-                                            pubdate=""
-                                            dateTime="2022-02-08"
-                                            title="February 8th, 2022"
-                                        >
-                                            Feb. 8, 2022
-                                        </time>
-                                    </p>
-
                                 </div>
                             </footer>
                             <p className="text-gray-500 dark:text-gray-400">
