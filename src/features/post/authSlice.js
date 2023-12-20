@@ -7,6 +7,7 @@ export const authSlice = createSlice({
         user: {
             displayName: "",
             email: "",
+            photoURL: "",
         }
     },
     reducers: {

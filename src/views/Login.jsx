@@ -6,6 +6,7 @@ import {setToken, setUser} from "../features/post/authSlice.js";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+
 function Login() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -16,7 +17,11 @@ function Login() {
             const result = await signInWithPopup(auth, provider);
             cookies.set("auth-token", result.user.refreshToken);
 
-            dispatch(setUser({displayName: result.user.displayName, email: result.user.email}))
+            dispatch(setUser({
+                displayName: result.user.displayName,
+                email: result.user.email,
+                photoURL: result.user.photoURL,
+            }))
             dispatch(setToken(result.user.refreshToken))
             navigate('/')
         } catch (err) {
