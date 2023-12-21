@@ -28,7 +28,7 @@ function Navbar() {
                         <div
                             className="flex flex-row items-center justify-between px-6 py-4 text-indigo-100 bg-indigo-900">
                             <h3 className="font-bold">
-                                <Link to="/">Instax Forum</Link>
+                                <Link to="/">Instax</Link>
                             </h3>
 
                             <span onClick={logout}>Logout</span>

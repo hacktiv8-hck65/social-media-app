@@ -72,15 +72,12 @@ function Home() {
         }
 
         await updateDoc(doc(db, "posts", id), {"likes": dataLikes});
-
-
-        // setComment("")
     };
     return (
         <div>
             <div className="flex flex-col items-center">
                 <form
-                    className="max-w-lg mx-auto p-6 bg-white border rounded-lg shadow-lg w-full"
+                    className="max-w-lg mx-auto p-6 bg-white border rounded-lg shadow w-full mb-5"
                 >
                     <div className="mb-4">
             <textarea
